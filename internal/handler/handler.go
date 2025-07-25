@@ -32,6 +32,13 @@ func Shorten(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Missing URL", http.StatusBadRequest)
 		return
 	}
+	existingCode, found := store.FindByURL(longURL)
+	if found {
+		shortURL := "http://localhost:8080/u/" + existingCode
+		tmpl, _ := template.ParseFiles(filepath.Join("templates", "result.html"))
+		tmpl.Execute(w, shortURL)
+		return
+	}
 	code := shortener.GenerateCode()
 	store.Save(code, longURL)
 

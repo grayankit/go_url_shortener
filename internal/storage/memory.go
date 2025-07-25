@@ -3,25 +3,33 @@ package storage
 import "sync"
 
 type Store struct {
-	mu    sync.RWMutex
-	links map[string]string
+	mu         sync.RWMutex
+	shortToURL map[string]string
+	URLToShort map[string]string
 }
 
 func NewStore() *Store {
 	return &Store{
-		links: make(map[string]string),
+		shortToURL: make(map[string]string),
+		URLToShort: make(map[string]string),
 	}
 }
-
+func (s *Store) FindByURL(longURL string) (string, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	code, ok := s.URLToShort[longURL]
+	return code, ok
+}
 func (s *Store) Save(code, longURL string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	s.links[code] = longURL
+	s.shortToURL[code] = longURL
+	s.URLToShort[longURL] = code
 }
 
 func (s *Store) Get(code string) (string, bool) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	url, ok := s.links[code]
+	url, ok := s.shortToURL[code]
 	return url, ok
 }
