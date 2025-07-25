@@ -4,12 +4,15 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/grayankit/go_url_shortener/internal/db"
 	"github.com/grayankit/go_url_shortener/internal/handler"
 	"github.com/grayankit/go_url_shortener/internal/logger"
 	"github.com/grayankit/go_url_shortener/internal/middleware"
 )
 
 func main() {
+	database := db.New("shortener.db")
+	handler.InitHandlers(database)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handler.Home)
 	mux.HandleFunc("/shorten", handler.Shorten)
