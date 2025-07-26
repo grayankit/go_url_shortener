@@ -14,6 +14,8 @@ func main() {
 	database := db.New("shortener.db")
 	handler.InitHandlers(database)
 	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("static"))
+	mux.Handle("/favicon.ico", fs)
 	mux.HandleFunc("/", handler.Home)
 	mux.HandleFunc("/shorten", handler.Shorten)
 	mux.HandleFunc("/u/", handler.Redirect)
