@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Stored URLs</h1>
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>Short URL</th>
+                <th>Original URL</th>
+                <th>Created At</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .}}
+            <tr>
+                <td><a href="/u/{{.Code}}" target="_blank">/u/{{.Code}}</a></td>
+                <td>{{.LongURL}}</td>
+                <td>{{.CreatedAt}}</td>
+                <td>
+                    <form action="/delete" method="POST" style="display:inline;">
+                        <input type="hidden" name="code" value="{{.Code}}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</body>
+</html>

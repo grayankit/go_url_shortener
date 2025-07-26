@@ -2,12 +2,17 @@ package db
 
 import (
 	"database/sql"
-	"log"
 	_ "github.com/mattn/go-sqlite3"
+	"log"
 )
 
 type DB struct {
 	conn *sql.DB
+}
+type URLRecord struct {
+	Code      string
+	LongURL   string
+	CreatedAt string
 }
 
 func New(path string) *DB {
@@ -44,4 +49,25 @@ func (db *DB) GetCodeByURL(longURL string) (string, error) {
 	var code string
 	err := row.Scan(&code)
 	return code, err
+}
+func (db *DB) GetAll() ([]URLRecord, error) {
+	rows, err := db.conn.Query(`SELECT code, long_url, created_at FROM urls ORDER BY created_at DESC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var urls []URLRecord
+	for rows.Next() {
+		var u URLRecord
+		err := rows.Scan(&u.Code, &u.LongURL, &u.CreatedAt)
+		if err != nil {
+			continue
+		}
+		urls = append(urls, u)
+	}
+	return urls, nil
+}
+func (db *DB) Delete(code string) error {
+	_, err := db.conn.Exec(`DELETE FROM urls WHERE code = ?`, code)
+	return err
 }

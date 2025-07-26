@@ -19,6 +19,8 @@ func main() {
 	mux.HandleFunc("/", handler.Home)
 	mux.HandleFunc("/shorten", handler.Shorten)
 	mux.HandleFunc("/u/", handler.Redirect)
+	mux.HandleFunc("/dashboard", handler.Dashboard)
+	mux.HandleFunc("/delete", handler.DeleteURL)
 
 	//Logging every request
 	logger := logger.NewLogger()
