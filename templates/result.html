@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <title>Shortened URL</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link href="/static/css/style.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Here is your shortened URL:</h1>
-    <a href="{{.}}">{{.}}</a>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md text-center">
+        <h1 class="text-2xl font-bold text-gray-900">Here is your shortened URL:</h1>
+        <div class="p-4 bg-gray-50 rounded-md">
+            <a href="{{.}}" class="text-blue-600 hover:underline break-all">{{.}}</a>
+        </div>
+        <div class="mt-6">
+          <a href="/" class="text-blue-600 hover:underline text-sm">← Back to Home</a>
+        </div>
+    </div>
 </body>
 </html>
